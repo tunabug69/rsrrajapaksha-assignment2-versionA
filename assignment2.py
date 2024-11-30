@@ -23,16 +23,28 @@ import os, sys
 
 def parse_command_args() -> object:
     "Set up argparse here. Call this function inside main."
-    parser = argparse.ArgumentParser(description="Memory Visualiser -- See Memory Usage Report with bar charts",epilog="Copyright 2023")
+
+    parser = argparse.ArgumentParser(description="Memory Visualiser -- See Memory Usage Report with bar charts", epilog="Copyright 2023")
+    # This creates an ArgumentParser object named `parser` and `description`: Describes the purpose of the script, displayed when the user runs `python script_name.py -h`.
+    # `epilog`: is the piece of text displayed at the end of the help message.
+    
+    parser.add_argument("-H", "--human-readable", action="store_true", help="Display memory usage in a human-readable format.")
+    # This adds the argument for `-H` and `--human-readable`. `action="store_true"` means if `-H` is provided, the value of `args.human_readable` will be `True`; otherwise, it will be `False`.
+    # `help`: A short description that will be shown in the help message when `-h` is typed.
+
     parser.add_argument("-l", "--length", type=int, default=20, help="Specify the length of the graph. Default is 20.")
-    # add argument for "human-readable". USE -H, don't use -h! -h is reserved for --help which is created automatically.
-    # check the docs for an argparse option to store this as a boolean.
-    parser.add_argument("program", type=str, nargs='?', help="if a program is specified, show memory use of all associated processes. Show only total use is not.")
-    args = parser.parse_args()
-    return args
-# create argparse function
-# -H human readable
-# -r running only
+    # This adds the argument for `-l` and `--length`. `type=int`: Specifies that the argument expects an integer value. `default=20`: If the user doesn't provide a value for `-l`, the default value of `20` will be used.
+    # `help`: This shows a description of what the argument does.
+
+    parser.add_argument("program", type=str, nargs='?', help="If a program is specified, show memory use of all associated processes. Show only total use if not.")
+    # This adds the positional argument `program` and `nargs='?'`: means the argument is optional, and if not provided, it will be `None`. `type=str`: Specifies that the argument expects a string (the program name).
+    # `help`: Describes what this argument does.
+
+    args = parser.parse_args() # Calls `parse_args()` to parse the command-line arguments provided by the user.
+    # It returns an object containing the parsed arguments which is stored as attributes.
+
+    return args # returns the `args` object, which contains the parsed command-line arguments.
+
 
 #---------------------------------------------------------------MILESTONE 1------------------------------------------------------------------------------------------------------
 

@@ -22,7 +22,7 @@ import argparse
 import os, sys
 
 def parse_command_args() -> object:
-    "Set up argparse here. Call this function inside main."
+    "The function will return an object (argparse.Namespace).It is designed to parse command-line arguments when called in the main function."
 
     parser = argparse.ArgumentParser(description="Memory Visualiser -- See Memory Usage Report with bar charts", epilog="Copyright 2023")
     # This creates an ArgumentParser object named `parser` and `description`: Describes the purpose of the script, displayed when the user runs `python script_name.py -h`.
@@ -96,8 +96,26 @@ def get_avail_mem() -> int:
 
 #------------------------------------------------------------MILESTONE 2----------------------------------------------------------------------
 def pids_of_prog(app_name: str) -> list:
-    "given an app name, return all pids associated with app"
-    ...
+    " This function takes an app name (a string) as input and returns a list of process IDs (PIDs) associated with the given app name."
+
+    try:
+        pid_output = os.popen(f"pidof {app_name}").read().strip() #The `os.popen()` function is used to run the shell command `pidof {app_name}` and capture the output.
+        # `pidof {app_name}` returns the PIDs of the running processes that match the provided app name.`.read()` reads the command's output, and `.strip()` removes any leading or trailing whitespace and including newlines.
+        
+        if pid_output: # what this does is if `pid_output` is not empty ,split the output by spaces into a list of PIDs.
+            pid_list = pid_output.split()
+        else:
+            pid_list = []  # what this does is if the output is empty then it returns an empty list.
+        
+    except Exception as e:
+        # This block handles any exceptions that might occur when executing the command.
+        print(f"Error while fetching PIDs for {app_name}: {e}")
+        # Print the error message if an exception occurs, including the exception message.
+        pid_list = []  # Return an empty list if an error occurs.
+
+    return pid_list
+    # Return the list of PIDs found for the app or an empty list if no PIDs were found or if an error occurred.
+
 
 def rss_mem_of_pid(proc_id: str) -> int:
     "given a process id, return the resident memory used, zero if not found"

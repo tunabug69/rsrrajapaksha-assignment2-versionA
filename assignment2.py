@@ -64,8 +64,22 @@ def get_sys_mem() -> int:
     
 def get_avail_mem() -> int:
     "return total memory that is available"
-    ...
-    
+    try:
+        with open("/proc/meminfo", "r") as meminfo_file: #This code opens the /proc/meminfo file in read only mode and we name the file meminfo_file
+            # to read the file line by line
+            for line in meminfo_file:
+                # to check if the line contains "MemAvailable"
+                if "MemAvailable" in line:
+                    # The below captures the memory value and converts it to an integer and return it
+                    available_memory = int(line.split()[1])  # we split the output and the second element,  the memory value is converted to an integer and then is returned as available_memory
+                    return available_memory
+    except FileNotFoundError: #this is here in case we do not find the meminfo file
+        print("Error: /proc/meminfo file not found.")
+        return None
+    except Exception as e: # this is here in case any other error other than the file not found happens 
+        print(f"An error occurred: {e}")
+        return None
+
 def pids_of_prog(app_name: str) -> list:
     "given an app name, return all pids associated with app"
     ...

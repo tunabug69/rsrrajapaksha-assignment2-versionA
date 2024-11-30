@@ -34,6 +34,8 @@ def parse_command_args() -> object:
 # -H human readable
 # -r running only
 
+#---------------------------------------------------------------MILESTONE 1------------------------------------------------------------------------------------------------------
+
 def percent_to_graph(percent: float, length: int=20) -> str:
     "turns a percent 0.0 - 1.0 into a bar graph"
     percent = max(0.0, min(1.0, percent)) # This function ensures the percentage is within bounds (0.0 to 1.0)
@@ -80,6 +82,7 @@ def get_avail_mem() -> int:
         print(f"An error occurred: {e}")
         return None
 
+#------------------------------------------------------------MILESTONE 2----------------------------------------------------------------------
 def pids_of_prog(app_name: str) -> list:
     "given an app name, return all pids associated with app"
     ...

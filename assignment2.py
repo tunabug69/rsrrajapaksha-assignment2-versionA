@@ -7,14 +7,15 @@ Author: "Ranmunige Senitha Ransen Rajapaksha"
 Semester: "Fall 2024"
 
 The python code in this file is original work written by
-"Student Name". No code in this file is copied from any other source 
+"Ramunige Senitha Ransen Rajapaksha". No code in this file is copied from any other source 
 except those provided by the course instructor, including any person, 
 textbook, or on-line resource. I have not shared this python script 
 with anyone or anything except for submission for grading.  
 I understand that the Academic Honesty Policy will be enforced and 
 violators will be reported and appropriate action will be taken.
 
-Description: <Enter your documentation here>
+Description: This script visualizes memory usage for system processes. It supports displaying the total system memory usage, 
+individual process memory usage, and offers the ability to display this information in a human-readable format.
 
 '''
 
@@ -150,12 +151,45 @@ def bytes_to_human_r(kibibytes: int, decimal_places: int=2) -> str:
     return str_result
 
 if __name__ == "__main__":
-    args = parse_command_args()
-    if not args.program:
-        ...
-    else:
-        ...
 
+    args = parse_command_args() # Call the `parse_command_args()` function to parse the command-line arguments passed to the script
+
+    # Total System Memory Section 
+    total_memory = get_sys_mem()  # Fetch the total system memory
+    available_memory = get_avail_mem()  # Fetch the available system memory
+
+    if total_memory is None or available_memory is None:
+        sys.exit(1)  # Exit the program if fetching memory info failed.
+
+    used_memory = total_memory - available_memory  # This is to calculate used memory
+    mem_percent = (used_memory / total_memory) * 100  # This is to calculate the percentage of memory used
+
+    # Display memory usage as a graph
+    print(f"Total Memory: {total_memory} kB")
+    print(f"Used Memory: {used_memory} kB")
+    print(f"Available Memory: {available_memory} kB")
+
+    # Graphically display memory usage
+    print(f"Memory Usage: {percent_to_graph(mem_percent, args.length)}")
+    print(f"Memory Usage Percentage: {mem_percent:.2f}%")
+
+    # ---- Program-Specific Memory Section ----
+    if args.program:  # If a program name is provided
+        program_name = args.program
+        print(f"\nMemory usage for processes related to {program_name}:")
+        pids = pids_of_prog(program_name)  # Get all PIDs for the program
+
+        if pids:
+            total_prog_mem = 0  # To store the total memory used by all processes of the program
+            for pid in pids:
+                total_prog_mem += rss_mem_of_pid(pid)  # Add RSS memory of each PID
+            
+            print(f"Total Memory Used by {program_name}: {total_prog_mem} kB")
+            
+            if args.human_readable: # This prints the total memory in a human readable format
+                print(f"Total Memory Used by {program_name} (Human Readable): {bytes_to_human_r(total_prog_mem)}")
+        else:
+            print(f"No running processes found for {program_name}.")
 
     # process args
     # if no parameter passed, 

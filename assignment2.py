@@ -3,8 +3,8 @@
 '''
 OPS445 Assignment 2
 Program: assignment2.py 
-Author: "Student Name"
-Semester: "Enter Winter/Summer/Fall Year"
+Author: "Ranmunige Senitha Ransen Rajapaksha"
+Semester: "Fall 2024"
 
 The python code in this file is original work written by
 "Student Name". No code in this file is copied from any other source 
@@ -36,8 +36,13 @@ def parse_command_args() -> object:
 
 def percent_to_graph(percent: float, length: int=20) -> str:
     "turns a percent 0.0 - 1.0 into a bar graph"
-    ...
-# percent to graph function
+    percent = max(0.0, min(1.0, percent)) # This function ensures the percentage is within bounds (0.0 to 1.0)
+    
+    num_hashes = int((percent - 0.0) / (1.0 - 0.0) * (length - 0) + 0) # This calculates the number of '#' symbols
+   
+    num_spaces = length - num_hashes # This calculates the number of spaces
+
+    return '#' * num_hashes + ' ' * num_spaces # This constructs and returns the bar graph
 
 def get_sys_mem() -> int:
     "return total system memory (used or available) in kB"
@@ -73,6 +78,8 @@ if __name__ == "__main__":
         ...
     else:
         ...
+
+
     # process args
     # if no parameter passed, 
     # open meminfo.

@@ -119,7 +119,23 @@ def pids_of_prog(app_name: str) -> list:
 
 def rss_mem_of_pid(proc_id: str) -> int:
     "given a process id, return the resident memory used, zero if not found"
-    ...
+    rss = 0 # This sets the `rss` to 0. This variable will store the Resident Set Size memory usage for the process.
+
+    try:
+        # Open the smaps file for the given process ID
+        with open(f'/proc/{proc_id}/smaps', 'r') as f:
+            # Iterate through each line in the file
+            for line in f:
+                # Look for the line starting with "Rss" which contains the RSS memory info
+                if line.startswith('Rss'):
+                    # Extract the RSS value in kilobytes from the line
+                    rss += int(line.split()[1])  # Splits value of the second item, which is in kilobytes
+    except Exception as e: # this handles all errors and prints an error message
+        print(f"Error while fetching RSS memory for PID {proc_id}: {e}")
+    
+    return rss
+
+
 
 def bytes_to_human_r(kibibytes: int, decimal_places: int=2) -> str:
     "turn 1,024 into 1 MiB, for example"
